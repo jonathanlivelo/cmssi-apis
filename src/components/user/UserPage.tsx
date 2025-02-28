@@ -2,8 +2,9 @@ import React, { useState, useEffect }  from 'react';
 import AddIcon from '@mui/icons-material/Add';
 import EditIcon from '@mui/icons-material/Edit';
 import DeleteIcon from '@mui/icons-material/DeleteOutlined';
-import {UserAPI} from '../apis/UserAPI';
-import {User} from '../models/User';
+import {UserAPI} from '../../apis/UserAPI';
+import {User} from '../../models/User';
+import { DialogsProvider, useDialogs, DialogProps } from '@toolpad/core/useDialogs';
 import {
            DataGrid,
            GridColDef,
@@ -32,14 +33,24 @@ function EditToolbar(props: GridSlotProps['toolbar']) {
   );
 }
 const paginationModel = { page: 0, pageSize: 5 };
-
 export default function UserCMP() {
 const [tableData, setTableData] = useState<User[]>([]);
 const [loadData, setLoadData] = useState<boolean>(true);
+const dialogs = useDialogs();
 const handleDeleteClick = (id: GridRowId) => () => {
      if(typeof id !== 'string'){
-         UserAPI.deleteOne(id);
-         setLoadData(true);
+          const deleteConfirmed = dialogs.confirm(
+                 `Are you sure you want to delete "${id}"?`,
+               );
+           deleteConfirmed.then(response=>{
+                   if (response){
+                              UserAPI.deleteOne(id);
+                              setLoadData(true);
+                   }
+               });
+
+
+
      }
  };
  const columns: GridColDef[] = [

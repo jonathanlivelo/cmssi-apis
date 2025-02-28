@@ -6,8 +6,8 @@ import { AppProvider, Navigation, Router, Branding } from '@toolpad/core/AppProv
 import { DashboardLayout } from '@toolpad/core/DashboardLayout';
 import { PageContainer } from '@toolpad/core/PageContainer';
 import logo from '../logo.jpg';
-import User from '../components/UserCMP';
-import Setting from '../components/SettingCMP';
+import User from './user/UserPage';
+import Setting from '../components/SettingPage';
 
 const NAVIGATION: Navigation = [
   {
@@ -71,10 +71,10 @@ export default function Main(props: any) {
 
   const router = useDemoRouter('/user');
 function Page(props: any) {
-  if (props.route == '/user') {
+  if (props.route === '/user') {
     return <User/>;
   }
-    if (props.route == '/setting') {
+    if (props.route === '/setting') {
       return <Setting/>;
     }
   return <User/>;
