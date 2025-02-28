@@ -1,11 +1,13 @@
 import * as React from 'react';
 import { extendTheme } from '@mui/material/styles';
 import PeopleIcon from '@mui/icons-material/People';
+import SettingsIcon from '@mui/icons-material/Settings';
 import { AppProvider, Navigation, Router, Branding } from '@toolpad/core/AppProvider';
 import { DashboardLayout } from '@toolpad/core/DashboardLayout';
 import { PageContainer } from '@toolpad/core/PageContainer';
 import logo from '../logo.jpg';
 import User from '../components/UserCMP';
+import Setting from '../components/SettingCMP';
 
 const NAVIGATION: Navigation = [
   {
@@ -16,6 +18,11 @@ const NAVIGATION: Navigation = [
     segment: 'user',
     title: 'User',
     icon: <PeopleIcon />,
+  },
+  {
+    segment: 'setting',
+    title: 'Setting',
+    icon: <SettingsIcon />,
   },
   {
     kind: 'divider',
@@ -63,7 +70,15 @@ export default function Main(props: any) {
   const { window } = props;
 
   const router = useDemoRouter('/user');
-
+function Page(props: any) {
+  if (props.route == '/user') {
+    return <User/>;
+  }
+    if (props.route == '/setting') {
+      return <Setting/>;
+    }
+  return <User/>;
+}
   // Remove this const when copying and pasting into your project.
   const demoWindow = window ? window() : undefined;
 
@@ -77,7 +92,7 @@ export default function Main(props: any) {
     >
       <DashboardLayout>
         <PageContainer>
-            <User/>
+            <Page route={router}/>
         </PageContainer>
       </DashboardLayout>
     </AppProvider>
