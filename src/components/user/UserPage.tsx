@@ -4,7 +4,8 @@ import EditIcon from '@mui/icons-material/Edit';
 import DeleteIcon from '@mui/icons-material/DeleteOutlined';
 import {UserAPI} from '../../apis/UserAPI';
 import {User} from '../../models/User';
-import { DialogsProvider, useDialogs, DialogProps } from '@toolpad/core/useDialogs';
+import UserDetails from './UserDetails';
+import {useDialogs } from '@toolpad/core/useDialogs';
 import {
            DataGrid,
            GridColDef,
@@ -15,13 +16,17 @@ import {
 import Paper from '@mui/material/Paper';
 import Button from '@mui/material/Button';
 
-
-
-
-
+const paginationModel = { page: 0, pageSize: 5 };
+export default function UserCMP() {
+const [tableData, setTableData] = useState<User[]>([]);
+const [loadData, setLoadData] = useState<boolean>(true);
+const [openForm, setOpenForm] = useState<boolean>(false);
+const [user, setUser] = useState<User>();
+const dialogs = useDialogs();
 function EditToolbar(props: GridSlotProps['toolbar']) {
   const handleClick = () => {
-      alert("add")
+      setOpenForm(true);
+      setUser({});
   };
 
   return (
@@ -32,11 +37,6 @@ function EditToolbar(props: GridSlotProps['toolbar']) {
     </GridToolbarContainer>
   );
 }
-const paginationModel = { page: 0, pageSize: 5 };
-export default function UserCMP() {
-const [tableData, setTableData] = useState<User[]>([]);
-const [loadData, setLoadData] = useState<boolean>(true);
-const dialogs = useDialogs();
 const handleDeleteClick = (id: GridRowId) => () => {
      if(typeof id !== 'string'){
           const deleteConfirmed = dialogs.confirm(
@@ -53,6 +53,20 @@ const handleDeleteClick = (id: GridRowId) => () => {
 
      }
  };
+ const handleEditClick = (id: GridRowId) => () => {
+      if(typeof id !== 'string'){
+        const result = UserAPI.getOne(id);
+        result.then((value) => {
+            alert(JSON.stringify(value));
+            setUser(value);
+            setOpenForm(true);
+        });
+      }
+  };
+ const handleClose  = () =>  {
+      setOpenForm(false);
+      setLoadData(true);
+  };
  const columns: GridColDef[] = [
    {
            field: 'actions',
@@ -66,6 +80,7 @@ const handleDeleteClick = (id: GridRowId) => () => {
                  icon={<EditIcon />}
                  label="Edit"
                  className="textPrimary"
+                 onClick={handleEditClick(id)}
                  color="inherit"
                />,
                <GridActionsCellItem
@@ -102,6 +117,8 @@ useEffect(() => {
         slots={{ toolbar: EditToolbar }}
         sx={{ border: 0 }}
       />
+      <UserDetails openForm={openForm} handleClose={handleClose} user={user} />
     </Paper>
+
   );
 }

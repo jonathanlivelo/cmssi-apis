@@ -20,6 +20,26 @@ async function getAll() {
       return responseData;
 }
 
+async function getOne(id:number) {
+    const response: AxiosResponse<User> = await axiosInstance.request({
+              method: "GET",
+              url: `/user/get/${id}`
+          });
+      const responseData: User = response.data;
+      return responseData;
+}
+
+async function createUpdate(user:User) {
+    await axiosInstance.request({
+              method: "POST",
+              headers: {
+                      'Content-Type': 'application/json'
+                  },
+              url: `/user/createUpdate`,
+              data: JSON.stringify(user),
+          });
+}
+
 export const UserAPI = {
-  getAll,deleteOne
+  getAll,deleteOne,createUpdate,getOne
 };
