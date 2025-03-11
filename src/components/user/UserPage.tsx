@@ -114,7 +114,7 @@ useEffect(() => {
         columns={columns}
         rows={tableData}
         initialState={{ pagination: { paginationModel } }}
-        pageSizeOptions={[5, 10]}
+        pageSizeOptions={[10, 10]}
         slots={{ toolbar: EditToolbar }}
         sx={{ border: 0 }}
       />
