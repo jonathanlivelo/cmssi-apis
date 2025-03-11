@@ -44,8 +44,10 @@ const handleDeleteClick = (id: GridRowId) => () => {
                );
            deleteConfirmed.then(response=>{
                    if (response){
-                              UserAPI.deleteOne(id);
-                              setLoadData(true);
+                              UserAPI.deleteOne(id).then(response => {
+                                    setLoadData(true);
+                                  });
+
                    }
                });
 
@@ -57,7 +59,6 @@ const handleDeleteClick = (id: GridRowId) => () => {
       if(typeof id !== 'string'){
         const result = UserAPI.getOne(id);
         result.then((value) => {
-            alert(JSON.stringify(value));
             setUser(value);
             setOpenForm(true);
         });

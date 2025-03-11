@@ -5,10 +5,11 @@ const axiosInstance = axios.create({
 });
 
 async function deleteOne(id:number) {
-    await axiosInstance.request({
+    const response: AxiosResponse<string> = await axiosInstance.request({
               method: "DELETE",
               url: `/user/delete/${id}`
           });
+      return response;
 }
 
 async function getAll() {
@@ -30,7 +31,7 @@ async function getOne(id:number) {
 }
 
 async function createUpdate(user:User) {
-    await axiosInstance.request({
+    const response: AxiosResponse<string> = await axiosInstance.request({
               method: "POST",
               headers: {
                       'Content-Type': 'application/json'
@@ -38,6 +39,7 @@ async function createUpdate(user:User) {
               url: `/user/createUpdate`,
               data: JSON.stringify(user),
           });
+      return response;
 }
 
 export const UserAPI = {

@@ -1,13 +1,10 @@
-import React, { useState, useEffect }  from 'react';
+import React  from 'react';
 import Button from '@mui/material/Button';
 import TextField from '@mui/material/TextField';
-import Hidden from '@mui/material/Hidden';
 import Dialog from '@mui/material/Dialog';
 import DialogActions from '@mui/material/DialogActions';
 import DialogContent from '@mui/material/DialogContent';
-import DialogContentText from '@mui/material/DialogContentText';
 import DialogTitle from '@mui/material/DialogTitle';
-import Paper from '@mui/material/Paper';
 import {User} from '../../models/User';
 import {UserAPI} from '../../apis/UserAPI';
 
@@ -29,8 +26,10 @@ export default function UserDetails(props: any) {
                   const formData = new FormData(event.currentTarget);
                   const formJson = Object.fromEntries((formData as any).entries());
                   user = {id:user.id, firstName : formJson.firstName, lastName: formJson.lastName, userName: formJson.userName, password: formJson.password}
-                  UserAPI.createUpdate(user);
-                  handleClose();
+                  UserAPI.createUpdate(user).then(response=>{
+                      handleClose();
+                      })
+
                 },
               },
             }}
